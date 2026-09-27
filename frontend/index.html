@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Document Q&A</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>AI Document Q&A</h1>
+
+        <p class="subtitle">
+            Upload a PDF and ask questions about its content.
+        </p>
+
+
+        <!-- Upload Section -->
+
+        <section class="card">
+
+            <h2>Upload Document</h2>
+
+            <input
+                type="file"
+                id="pdfFile"
+                accept=".pdf"
+            >
+
+            <button id="uploadBtn">
+                Upload PDF
+            </button>
+
+            <p id="uploadStatus"></p>
+
+        </section>
+
+
+        <!-- Documents Section -->
+
+        <section class="card">
+
+            <h2>Your Documents</h2>
+
+            <div id="documentsList">
+                <p>Loading documents...</p>
+            </div>
+
+        </section>
+
+
+        <!-- Question Section -->
+
+        <section class="card">
+
+            <h2>Ask a Question</h2>
+
+            <p id="selectedDocument">
+                Select a document first.
+            </p>
+
+            <textarea
+                id="question"
+                placeholder="Ask something about your document..."
+            ></textarea>
+
+            <button id="askBtn">
+                Ask Question
+            </button>
+
+            <div id="answer"></div>
+
+        </section>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

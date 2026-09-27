@@ -1,0 +1,19 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Local Qdrant database
+qdrant_storage/
+
+# Uploaded files
+uploads/
+
+# Virtual environment
+venv/
+.venv/
+
+# VS Code
+.vscode/
