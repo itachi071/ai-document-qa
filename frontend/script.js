@@ -1,4 +1,4 @@
-const API_URL = "https://ai-document-qa-u1v1.onrender.com/git ";
+const API_URL = "https://ai-document-qa-u1v1.onrender.com";
 
 let selectedDocumentId = null;
 // ===============================
