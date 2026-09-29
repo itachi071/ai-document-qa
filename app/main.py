@@ -130,6 +130,8 @@ async def upload_document(
             detail="Only PDF files are allowed"
         )
 
+    os.makedirs("uploads", exist_ok=True)
+    
     file_path = os.path.join(
         "uploads",
         file.filename
