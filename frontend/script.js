@@ -1,8 +1,6 @@
-const API_URL = "https://ai-document-qa-u1v1.onrender.com/";
+const API_URL = "https://ai-document-qa-u1v1.onrender.com/git ";
 
 let selectedDocumentId = null;
-
-
 // ===============================
 // Load documents
 // ===============================
