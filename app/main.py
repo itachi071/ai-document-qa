@@ -10,7 +10,7 @@ from .database import engine, get_db
 from .models import Base, Document
 from .schemas import DocumentCreate
 from .chunker import split_text
-from .embedings import create_embedding
+from .embedings import  create_embeddings, create_embedding
 from .vector_db import store_chunks, delete_document_chunks
 from .schemas import QuestionRequest
 from .vector_db import search_chunks
@@ -176,14 +176,7 @@ async def upload_document(
 
     # Create embeddings
 
-    embeddings = []
-
-    for chunk in chunks:
-
-        vector = create_embedding(chunk)
-
-        embeddings.append(vector)
-
+    embeddings = create_embeddings(chunks)
     # Store chunks in Qdrant
 
     store_chunks(
@@ -201,40 +194,40 @@ async def upload_document(
         "total_chunks": len(chunks)
     }
 
-@app.post("/ask")
-def ask_question(request: QuestionRequest):
+# @app.post("/ask")
+# def ask_question(request: QuestionRequest):
 
-    # 1. Convert question into embedding
-    query_embedding = create_embedding(request.question)
+#     # 1. Convert question into embedding
+#     query_embedding = create_embedding(request.question)
 
-    # 2. Search Qdrant
-    results = search_chunks(query_embedding)
+#     # 2. Search Qdrant
+#     results = search_chunks(query_embedding)
 
-    # 3. Build context from retrieved chunks
-    context = ""
+#     # 3. Build context from retrieved chunks
+#     context = ""
 
-    for result in results:
-        context += result.payload["text"] + "\n\n"
+#     for result in results:
+#         context += result.payload["text"] + "\n\n"
 
-    # 4. Ask Gemini
-    answer = generate_answer(
-        request.question,
-        context
-    )
+#     # 4. Ask Gemini
+#     answer = generate_answer(
+#         request.question,
+#         context
+#     )
 
-    # 5. Return answer + sources
-    return {
-        "question": request.question,
-        "answer": answer,
-        "sources": [
-            {
-                "filename": result.payload["filename"],
-                "chunk_index": result.payload["chunk_index"],
-                "score": result.score
-            }
-            for result in results
-        ]
-    }
+#     # 5. Return answer + sources
+#     return {
+#         "question": request.question,
+#         "answer": answer,
+#         "sources": [
+#             {
+#                 "filename": result.payload["filename"],
+#                 "chunk_index": result.payload["chunk_index"],
+#                 "score": result.score
+#             }
+#             for result in results
+#         ]
+#     }
 
 @app.post("/documents/{document_id}/ask")
 def ask_document_question(

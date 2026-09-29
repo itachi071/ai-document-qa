@@ -32,7 +32,7 @@ if not client.collection_exists(COLLECTION_NAME):
     client.create_collection(
         collection_name=COLLECTION_NAME,
         vectors_config=VectorParams(
-            size=384,
+            size=768,
             distance=Distance.COSINE
         )
     )
@@ -49,34 +49,41 @@ client.create_payload_index(
 # ===============================
 
 def store_chunks(chunks, embeddings, filename, document_id):
+    batch_size = 20
 
-    points = []
+    for start in range(0, len(chunks), batch_size):
 
-    for index, (chunk, embedding) in enumerate(
-        zip(chunks, embeddings)
-    ):
+        batch_chunks = chunks[start:start + batch_size]
+        batch_embeddings = embeddings[start:start + batch_size]
 
-        point = PointStruct(
+        points = []
 
-            id=str(uuid4()),
+        for index, (chunk, embedding) in enumerate(
+            zip(batch_chunks, batch_embeddings),
+            start=start
+        ):
+            point = PointStruct(
+                id=str(uuid4()),
+                vector=embedding,
+                payload={
+                    "document_id": document_id,
+                    "filename": filename,
+                    "chunk_index": index,
+                    "text": chunk
+                }
+            )
 
-            vector=embedding,
+            points.append(point)
 
-            payload={
-                "document_id": document_id,
-                "filename": filename,
-                "chunk_index": index,
-                "text": chunk
-            }
+        client.upsert(
+            collection_name=COLLECTION_NAME,
+            points=points
         )
 
-        points.append(point)
-
-    client.upsert(
-        collection_name=COLLECTION_NAME,
-        points=points
-    )
-
+        print(
+            f"Stored chunks {start} to "
+            f"{start + len(points) - 1}"
+        )
 
 # ===============================
 # Search chunks
