@@ -276,13 +276,14 @@ async function askQuestion() {
 
         // Create answer section
 
+        const formattedAnswer = formatAnswer(data.answer);
+
         let html = `
             <div class="answer-content">
-
                 <h3>Answer</h3>
-
-                <p>${data.answer}</p>
-
+                <div class="answer-text">
+                    ${formattedAnswer}
+                </div>
             </div>
         `;
 
@@ -335,6 +336,74 @@ async function askQuestion() {
 // ===============================
 // Simple HTML escaping
 // ===============================
+
+function formatAnswer(text) {
+    const lines = text.split("\n");
+
+    let html = "";
+    let inList = false;
+
+    lines.forEach(line => {
+        line = line.trim();
+
+        if (!line) {
+            if (inList) {
+                html += "</ul>";
+                inList = false;
+            }
+            return;
+        }
+
+        // Heading
+        if (line.startsWith("### ")) {
+            if (inList) {
+                html += "</ul>";
+                inList = false;
+            }
+
+            html += `<h4>${escapeHtml(line.substring(4))}</h4>`;
+            return;
+        }
+
+        // Bullet point
+        if (line.startsWith("- ") || line.startsWith("* ")) {
+            if (!inList) {
+                html += "<ul>";
+                inList = true;
+            }
+
+            html += `<li>${escapeHtml(line.substring(2))}</li>`;
+            return;
+        }
+
+        // Numbered list
+        if (/^\d+\.\s/.test(line)) {
+            if (inList) {
+                html += "</ul>";
+                inList = false;
+            }
+
+            const content = line.replace(/^\d+\.\s/, "");
+
+            html += `<p class="numbered-item">${escapeHtml(content)}</p>`;
+            return;
+        }
+
+        // Normal paragraph
+        if (inList) {
+            html += "</ul>";
+            inList = false;
+        }
+
+        html += `<p>${escapeHtml(line)}</p>`;
+    });
+
+    if (inList) {
+        html += "</ul>";
+    }
+
+    return html;
+}
 
 function escapeHtml(text) {
 

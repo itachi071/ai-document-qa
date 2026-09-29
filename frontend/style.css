@@ -159,3 +159,29 @@ textarea {
     font-size: 14px;
 }
 
+.answer-text {
+    line-height: 1.7;
+    color: #333;
+}
+
+.answer-text p {
+    margin: 0 0 12px 0;
+}
+
+.answer-text h4 {
+    margin: 16px 0 8px 0;
+    font-size: 16px;
+}
+
+.answer-text ul {
+    margin: 8px 0 14px 0;
+    padding-left: 24px;
+}
+
+.answer-text li {
+    margin-bottom: 7px;
+}
+
+.numbered-item {
+    margin-left: 8px !important;
+}
