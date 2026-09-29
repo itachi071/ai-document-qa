@@ -15,21 +15,17 @@ from .vector_db import store_chunks, delete_document_chunks
 from .schemas import QuestionRequest
 from .vector_db import search_chunks
 from .llm import generate_answer
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://127.0.0.1:5500",
-        "http://localhost:5500",
-        "https://ai-document-qa-29lg.onrender.com"
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 Base.metadata.create_all(bind=engine)
 
 
